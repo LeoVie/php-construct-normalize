@@ -1,0 +1,23 @@
+{
+  "timeout": 10,
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "phpUnit": {
+    "configDir": "."
+  },
+  "logs": {
+    "text": "build/logs/infection.log"
+  },
+  "mutators": {
+    "@default": true,
+    "IncrementInteger": {
+      "ignore": [
+        "LeoVie\\PhpMethodModifier\\Service\\MethodModifierService::extractAccessModifier"
+      ]
+    }
+  },
+  "tmpDir": "../cache"
+}

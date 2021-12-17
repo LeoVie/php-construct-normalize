@@ -1,0 +1,15 @@
+parameters:
+# nothing to declare
+
+services:
+  _defaults:
+    autowire: true
+
+  LeoVie\PhpConstructNormalize\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/PhpMethodModifierBundle.php'
+
+  LeoVie\PhpConstructNormalize\Service\ConstructNormalizeService:
+    public: true
