@@ -7,9 +7,9 @@ use LeoVie\PhpConstructNormalize\Exception\CommandFailed;
 use LeoVie\PhpConstructNormalize\Helper\ArrayHelper;
 use LeoVie\PhpConstructNormalize\Helper\DiffHelper;
 use LeoVie\PhpConstructNormalize\Helper\DirectoryHelper;
+use LeoVie\PhpConstructNormalize\Wrapper\ParserWrapper;
 use Safe\Exceptions\JsonException;
 use SebastianBergmann\Diff\Diff;
-use SebastianBergmann\Diff\Parser;
 
 class ConstructNormalizeService
 {
@@ -19,7 +19,7 @@ class ConstructNormalizeService
         private ArrayHelper     $arrayHelper,
         private DirectoryHelper $directoryHelper,
         private DiffHelper      $diffHelper,
-        private Parser          $parser,
+        private ParserWrapper   $parserWrapper,
     )
     {
     }
@@ -41,7 +41,7 @@ class ConstructNormalizeService
             /** @var string $diff */
             $diff = $this->arrayHelper->extractFromArray(['file_diffs', 0, 'diff'], $json);
             /** @var Diff $parsedDiff */
-            $parsedDiff = $this->arrayHelper->extractFromArray([0], $this->parser->parse($diff));
+            $parsedDiff = $this->arrayHelper->extractFromArray([0], $this->parserWrapper->create()->parse($diff));
         } catch (JsonException|ArrayKeyDoesNotExist) {
             return $methodCode;
         }
