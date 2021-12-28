@@ -3,7 +3,6 @@
 namespace LeoVie\PhpConstructNormalize\Service;
 
 use LeoVie\PhpConstructNormalize\Exception\ArrayKeyDoesNotExist;
-use LeoVie\PhpConstructNormalize\Exception\CommandFailed;
 use LeoVie\PhpConstructNormalize\Helper\ArrayHelper;
 use LeoVie\PhpConstructNormalize\Helper\DiffHelper;
 use LeoVie\PhpConstructNormalize\Helper\DirectoryHelper;
@@ -13,7 +12,7 @@ use SebastianBergmann\Diff\Diff;
 
 class ConstructNormalizeService
 {
-    private const RECTOR_COMMAND = __DIR__ . '/../../vendor/bin/rector process %s --dry-run --clear-cache --output-format json';
+    private const RECTOR_COMMAND = __DIR__ . '/../../../../bin/rector process %s --dry-run --clear-cache --output-format json --config=' . __DIR__ . '/../../rector.php';
 
     public function __construct(
         private ArrayHelper     $arrayHelper,
