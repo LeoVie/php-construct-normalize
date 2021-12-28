@@ -6,12 +6,12 @@ parameters:
         - %currentWorkingDirectory%/src
         - %currentWorkingDirectory%/tests/Unit
     disallowedMethodCalls:
-        - method: '*\*::__construct'
+        - method: 'LeoVie\\PhpConstructNormalize\\*::__construct'
           message: "Don't use naive object instantiation."
           allowIn:
             - %currentWorkingDirectory%/tests/*
             - %currentWorkingDirectory%/src/DependencyInjection/*
             - %currentWorkingDirectory%/src/ServiceFactory/*
     ignoreErrors:
-#        - '#Method LeoVie\\PhpConstructNormalize\\Tests.+ has parameter .+ with no value type specified in iterable type .+#'
-#        - '#Method LeoVie\\PhpConstructNormalize\\Tests.+ return type has no value type specified in iterable type .+#'
+        - '#Method LeoVie\\PhpConstructNormalize\\Tests.+ has parameter .+ with no value type specified in iterable type .+#'
+        - '#Method LeoVie\\PhpConstructNormalize\\Tests.+ return type has no value type specified in iterable type .+#'
