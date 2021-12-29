@@ -6,9 +6,12 @@ use LeoVie\PhpConstructNormalize\Helper\DirectoryHelper;
 
 class ConstructNormalizeService
 {
+    private const VENDOR_PATH = __DIR__ . '/../../../..';
+    private const RECTOR_PATH = self::VENDOR_PATH . '/bin/rector';
+    private const RECTOR_CONFIGS_PATH = __DIR__ . '/../..';
     private const RECTOR_COMMANDS = [
-        __DIR__ . '/../../vendor/bin/rector process %s --clear-cache --output-format json --config=' . __DIR__ . '/../../rector_01.php',
-        __DIR__ . '/../../vendor/bin/rector process %s --clear-cache --output-format json --config=' . __DIR__ . '/../../rector_02.php',
+        self::RECTOR_PATH . ' process %s --clear-cache --output-format json --config=' . self::RECTOR_CONFIGS_PATH . '/rector_01.php',
+        self::RECTOR_PATH . ' process %s --clear-cache --output-format json --config=' . self::RECTOR_CONFIGS_PATH . '/rector_02.php',
     ];
 
     public function __construct(private DirectoryHelper $directoryHelper)
