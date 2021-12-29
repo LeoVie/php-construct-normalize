@@ -3,6 +3,7 @@
 namespace LeoVie\PhpConstructNormalize\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,13 +38,37 @@ class ForToWhileRector extends AbstractRector
         $loop = $for->loop;
         $statements = $for->stmts;
 
-        $statements[] = new Expression($loop[0]);
+        $loopVarChange = new Expression($loop[0]);
+        $statements[] = $loopVarChange;
+
         return [
             new Expression($init[0]),
             new Node\Stmt\While_(
                 $cond[0],
-                $statements
+                $this->prependContinuesWithLoopVarChange($statements, $loopVarChange)
             ),
+        ];
+    }
+
+    private function prependContinuesWithLoopVarChange(array $statements, Expression $loopVarChange): array
+    {
+        $replaced = [];
+        foreach ($statements as $statement) {
+            array_push($replaced, ...$this->prependIfContinue($statement, $loopVarChange));
+        }
+
+        return $replaced;
+    }
+
+    private function prependIfContinue(Stmt $statement, Expression $loopVarChange): array
+    {
+        if (!$statement instanceof Stmt\Continue_) {
+            return [$statement];
+        }
+
+        return [
+            $loopVarChange,
+            $statement
         ];
     }
 }

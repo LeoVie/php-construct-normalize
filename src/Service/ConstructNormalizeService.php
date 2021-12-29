@@ -2,24 +2,16 @@
 
 namespace LeoVie\PhpConstructNormalize\Service;
 
-use LeoVie\PhpConstructNormalize\Exception\ArrayKeyDoesNotExist;
-use LeoVie\PhpConstructNormalize\Helper\ArrayHelper;
-use LeoVie\PhpConstructNormalize\Helper\DiffHelper;
 use LeoVie\PhpConstructNormalize\Helper\DirectoryHelper;
-use LeoVie\PhpConstructNormalize\Wrapper\ParserWrapper;
-use Safe\Exceptions\JsonException;
-use SebastianBergmann\Diff\Diff;
 
 class ConstructNormalizeService
 {
-    private const RECTOR_COMMAND = __DIR__ . '/../../../../bin/rector process %s --dry-run --clear-cache --output-format json --config=' . __DIR__ . '/../../rector.php';
+    private const RECTOR_COMMANDS = [
+        __DIR__ . '/../../vendor/bin/rector process %s --clear-cache --output-format json --config=' . __DIR__ . '/../../rector_01.php',
+        __DIR__ . '/../../vendor/bin/rector process %s --clear-cache --output-format json --config=' . __DIR__ . '/../../rector_02.php',
+    ];
 
-    public function __construct(
-        private ArrayHelper     $arrayHelper,
-        private DirectoryHelper $directoryHelper,
-        private DiffHelper      $diffHelper,
-        private ParserWrapper   $parserWrapper,
-    )
+    public function __construct(private DirectoryHelper $directoryHelper)
     {
     }
 
@@ -28,24 +20,15 @@ class ConstructNormalizeService
         $method = '<?php ' . $methodCode;
 
         $tmpPathForMethod = $this->directoryHelper->createUniqueDirectory(__DIR__ . '/../../generated/');
+        $tmpMethodFile = $tmpPathForMethod . 'method.php';
 
-        \Safe\file_put_contents($tmpPathForMethod . 'method.php', $method . "\n");
+        \Safe\file_put_contents($tmpMethodFile, $method . "\n");
 
-        $rectorResult = $this->runRector($tmpPathForMethod);
+        $this->runRector($tmpPathForMethod);
+
+        $newMethod = \Safe\file_get_contents($tmpMethodFile);
+
         $this->directoryHelper->deleteDirectory(['method.php'], $tmpPathForMethod);
-
-        try {
-            /** @var array<mixed> $json */
-            $json = \Safe\json_decode($rectorResult, true);
-            /** @var string $diff */
-            $diff = $this->arrayHelper->extractFromArray(['file_diffs', 0, 'diff'], $json);
-            /** @var Diff $parsedDiff */
-            $parsedDiff = $this->arrayHelper->extractFromArray([0], $this->parserWrapper->create()->parse($diff));
-        } catch (JsonException|ArrayKeyDoesNotExist) {
-            return $methodCode;
-        }
-
-        $newMethod = $this->diffHelper->reconstructNewFromOriginalAndDiff($method, $parsedDiff);
 
         /** @var string $newMethodCode */
         $newMethodCode = \Safe\preg_replace('@^<\?php @', '', $newMethod);
@@ -53,15 +36,11 @@ class ConstructNormalizeService
         return $newMethodCode;
     }
 
-    private function runRector(string $tmpPathForMethod): string
+    private function runRector(string $tmpPathForMethod): void
     {
-        $command = \Safe\sprintf(self::RECTOR_COMMAND, $tmpPathForMethod);
-        $result = shell_exec($command);
-
-        if (!is_string($result)) {
-            return '';
+        foreach (self::RECTOR_COMMANDS as $rectorCommand) {
+            $command = \Safe\sprintf($rectorCommand, $tmpPathForMethod);
+            shell_exec($command);
         }
-
-        return $result;
     }
 }
