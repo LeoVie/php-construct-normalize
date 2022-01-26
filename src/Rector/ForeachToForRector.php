@@ -41,7 +41,7 @@ class ForeachToForRector extends AbstractRector
         );
     }
 
-    public function refactor(Node $node)
+    public function refactor(Node $node): Node|array|null
     {
         /** @var Foreach_ $foreach */
         $foreach = $node;

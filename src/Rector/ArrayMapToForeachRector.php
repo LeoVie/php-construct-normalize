@@ -22,7 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 class ArrayMapToForeachRector extends AbstractRector
 {
-    private string $transformedArrayVarName;
+    private string $transformedArrayVarName = '';
+    /** @var class-string<NameGenerator> */
     protected string $nameGeneratorClass = RandomNameGenerator::class;
 
     public function getNodeTypes(): array
@@ -42,7 +43,7 @@ class ArrayMapToForeachRector extends AbstractRector
         );
     }
 
-    public function refactor(Node $node)
+    public function refactor(Node $node): Node|array|null
     {
         if ($node instanceof Assign || $node instanceof Return_) {
             return $this->refactorTyped($node);
@@ -75,7 +76,7 @@ class ArrayMapToForeachRector extends AbstractRector
         }
 
         /** @var NameGenerator $nameGenerator */
-        $nameGenerator = new $this->nameGeneratorClass();
+        $nameGenerator = $this->nameGeneratorClass::create();
         $this->transformedArrayVarName = $nameGenerator->generate();
 
         $refactoredArrayMapFuncCall = $this->refactorArrayMapFuncCall($funcCall);

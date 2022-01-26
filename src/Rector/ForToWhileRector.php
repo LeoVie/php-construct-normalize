@@ -28,7 +28,7 @@ class ForToWhileRector extends AbstractRector
         );
     }
 
-    public function refactor(Node $node)
+    public function refactor(Node $node): Node|array|null
     {
         /** @var Node\Stmt\For_ $for */
         $for = $node;
@@ -50,6 +50,11 @@ class ForToWhileRector extends AbstractRector
         ];
     }
 
+    /**
+     * @param array<Stmt> $statements
+     *
+     * @return array<Stmt>
+     */
     private function prependContinuesWithLoopVarChange(array $statements, Expression $loopVarChange): array
     {
         $replaced = [];
@@ -60,6 +65,7 @@ class ForToWhileRector extends AbstractRector
         return $replaced;
     }
 
+    /** @return array<Stmt\Continue_>|array<Expression|Stmt> */
     private function prependIfContinue(Stmt $statement, Expression $loopVarChange): array
     {
         if (!$statement instanceof Stmt\Continue_) {

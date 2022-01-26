@@ -12,4 +12,12 @@
             <directory name="../../vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <ForbiddenCode>
+            <errorLevel type="suppress">
+                <file name="../../src/Service/ConstructNormalizeService.php" />
+            </errorLevel>
+        </ForbiddenCode>
+    </issueHandlers>
 </psalm>
