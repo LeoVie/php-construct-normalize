@@ -5,6 +5,7 @@ namespace LeoVie\PhpConstructNormalize\Tests\Unit\Rector;
 use LeoVie\PhpConstructNormalize\Tests\TestDouble\Helper\NameGeneratorDouble;
 use LeoVie\PhpConstructNormalize\Tests\TestDouble\Rector\ArrayMapToForeachRectorDouble;
 use LeoVie\PhpConstructNormalize\Tests\TestDouble\Vendor\NodesToAddCollector;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -27,14 +28,14 @@ use PHPUnit\Framework\TestCase;
 class ArrayMapToForeachRectorTest extends TestCase
 {
     /** @dataProvider refactorProvider */
-    public function testRefactor(Assign|Return_ $assignOrReturn, Assign|Return_ $expected, array $expectedNodesBefore): void
+    public function testRefactor(Node $node, Node $expected, array $expectedNodesBefore): void
     {
         $nodesToAddCollector = new NodesToAddCollector();
         $arrayMapToForeachRector = new ArrayMapToForeachRectorDouble();
         $arrayMapToForeachRector->setNodesToAddCollector($nodesToAddCollector);
         $arrayMapToForeachRector->setNameGeneratorClass(NameGeneratorDouble::class);
 
-        self::assertEquals($expected, $arrayMapToForeachRector->refactor($assignOrReturn));
+        self::assertEquals($expected, $arrayMapToForeachRector->refactor($node));
         self::assertEquals($expectedNodesBefore, $nodesToAddCollector->addedNodesBeforeNode);
     }
 
@@ -57,9 +58,15 @@ class ArrayMapToForeachRectorTest extends TestCase
             new LNumber(2)
         );
 
+        $unsupportedNodeType = new Variable('x');
         return [
-            [
-                'assignOrReturn' => new Assign(
+            'unsupported node type' => [
+                'node' => $unsupportedNodeType,
+                'expected' => $unsupportedNodeType,
+                'expectedNodesBefore' => [],
+            ],
+            'assign' => [
+                'node' => new Assign(
                     new Variable('foo'),
                     new FuncCall(
                         new Name('array_map'), [
@@ -117,8 +124,8 @@ class ArrayMapToForeachRectorTest extends TestCase
                     ),
                 ],
             ],
-            [
-                'assignOrReturn' => new Return_(
+            'return' => [
+                'node' => new Return_(
                     new FuncCall(
                         new Name('array_map'), [
                         new Arg(

@@ -23,6 +23,11 @@
       "ignore": [
         "LeoVie\\PhpConstructNormalize\\Helper\\RandomNameGenerator::pickRandomCharacter"
       ]
+    },
+    "Minus": {
+      "ignore": [
+        "LeoVie\\PhpConstructNormalize\\Helper\\RandomNameGenerator::pickRandomCharacter"
+      ]
     }
   },
   "tmpDir": "../cache"
