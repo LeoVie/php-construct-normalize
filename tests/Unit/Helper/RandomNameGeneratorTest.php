@@ -19,6 +19,7 @@ class RandomNameGeneratorTest extends TestCase
             strlen($prefix) + 30,
             strlen($randomName)
         );
+        self::assertMatchesRegularExpression('@([A-Z][a-z])|([a-z][A-Z])@', $randomName);
     }
 
     public function generateProvider(): array

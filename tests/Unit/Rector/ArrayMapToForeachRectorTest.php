@@ -117,6 +117,63 @@ class ArrayMapToForeachRectorTest extends TestCase
                     ),
                 ],
             ],
+            [
+                'assignOrReturn' => new Return_(
+                    new FuncCall(
+                        new Name('array_map'), [
+                        new Arg(
+                            new Closure([
+                                'static' => false,
+                                'byRef' => false,
+                                'params' => [
+                                    new Param(
+                                        new Variable('x'),
+                                        null,
+                                        new Identifier('int')
+                                    ),
+                                ],
+                                'returnType' => new Identifier('int'),
+                                'stmts' => [
+                                    new Return_(
+                                        $statement
+                                    ),
+                                ],
+                            ])
+                        ),
+                        new Arg(
+                            $array
+                        ),
+                    ])
+                ),
+                'expected' => new Return_(
+                    new Variable('_GENERATED')
+                ),
+                'expectedNodesBefore' => [
+                    new Expression(
+                        new Assign(
+                            new Variable('_GENERATED'),
+                            new Array_()
+                        )
+                    ),
+                    new Foreach_(
+                        $array,
+                        new Variable('x'),
+                        [
+                            'stmts' => [
+                                new Expression(
+                                    new Assign(
+                                        new ArrayDimFetch(
+                                            new Variable('_GENERATED')
+                                        ),
+                                        $statement
+                                    )
+                                ),
+                                new Continue_(),
+                            ],
+                        ]
+                    ),
+                ],
+            ],
         ];
     }
 }

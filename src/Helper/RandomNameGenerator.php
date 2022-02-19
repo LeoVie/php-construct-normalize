@@ -20,6 +20,7 @@ class RandomNameGenerator implements NameGenerator
         $this->alphabet = $this->createAlphabet();
     }
 
+    /** @return array<int, string> */
     private function createAlphabet(): array
     {
         return array_merge(range('A', 'Z'), range('a', 'z'));

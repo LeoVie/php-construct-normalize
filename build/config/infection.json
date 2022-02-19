@@ -15,7 +15,13 @@
     "@default": true,
     "IncrementInteger": {
       "ignore": [
-        "LeoVie\\PhpMethodModifier\\Service\\MethodModifierService::extractAccessModifier"
+        "LeoVie\\PhpMethodModifier\\Service\\MethodModifierService::extractAccessModifier",
+        "LeoVie\\PhpConstructNormalize\\Helper\\RandomNameGenerator::pickRandomCharacter"
+      ]
+    },
+    "DecrementInteger": {
+      "ignore": [
+        "LeoVie\\PhpConstructNormalize\\Helper\\RandomNameGenerator::pickRandomCharacter"
       ]
     }
   },
