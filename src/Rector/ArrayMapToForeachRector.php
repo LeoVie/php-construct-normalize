@@ -92,7 +92,7 @@ class ArrayMapToForeachRector extends AbstractRector
     {
         /** @var Node\Arg $firstArg */
         $firstArg = $arrayMapFuncCall->getRawArgs()[0];
-        /** @var Closure $closure */
+        /** @var Node\Expr\Closure $closure */
         $closure = $firstArg->value;
 
         /** @var Node\Arg $secondArg */
