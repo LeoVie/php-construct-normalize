@@ -30,7 +30,7 @@
         "roave/security-advisories": "dev-latest"
     },
     "require-dev": {
-        "infection/infection": "^0.25.3",
+        "infection/infection": "^0.26.6",
         "psalm/plugin-symfony": "^3.0",
         "symfony/phpunit-bridge": "^6.0",
         "vimeo/psalm": "^4.18",
