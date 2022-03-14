@@ -1,7 +1,7 @@
 {
     "name": "leovie/php-construct-normalize",
     "description": "Normalize php language constructs.",
-    "license": "proprietary",
+    "license": "BSD-3-Clause",
     "type": "symfony-bundle",
     "autoload": {
         "psr-4": {
