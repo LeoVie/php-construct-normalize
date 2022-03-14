@@ -17,8 +17,6 @@ class NodesToAddCollector implements NodeCollectorInterface
     /** @param Node[] $newNodes */
     public function addNodesBeforeNode(array $newNodes, \PhpParser\Node $positionNode): void
     {
-//        var_dump('adding ' . count($newNodes) . ' new nodes');
-
         array_push($this->addedNodesBeforeNode, ...$newNodes);
     }
 }

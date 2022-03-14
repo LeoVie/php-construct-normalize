@@ -28,7 +28,7 @@ class ArrowFunctionToClosureRector extends AbstractRector
         );
     }
 
-    public function refactor(Node $node)
+    public function refactor(Node $node): Node|array|null
     {
         /** @var ArrowFunction $arrowFunction */
         $arrowFunction = $node;
