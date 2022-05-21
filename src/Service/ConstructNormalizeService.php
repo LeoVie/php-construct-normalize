@@ -42,7 +42,7 @@ class ConstructNormalizeService
     private function runRector(string $tmpPathForMethod): void
     {
         foreach (self::RECTOR_COMMANDS as $rectorCommand) {
-            $command = \Safe\sprintf($rectorCommand, $tmpPathForMethod);
+            $command = sprintf($rectorCommand, $tmpPathForMethod);
             shell_exec($command);
         }
     }
